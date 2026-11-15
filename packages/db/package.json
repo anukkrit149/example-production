@@ -1,0 +1,44 @@
+{
+  "name": "@hf/db",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./test": "./src/test-db.ts",
+    "./client-workerd": "./src/generated-workerd/client.ts"
+  },
+  "imports": {
+    "#prisma-client": {
+      "workerd": "./src/generated-workerd/client.ts",
+      "default": "./src/generated/client.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "echo skip",
+    "build": "prisma generate",
+    "migrate": "prisma migrate dev",
+    "seed": "prisma db seed",
+    "reset": "prisma migrate reset --force",
+    "generate": "prisma generate",
+    "test": "vitest run",
+    "seed:checklists": "tsx scripts/seed-checklists.ts"
+  },
+  "dependencies": {
+    "@hf/domain": "workspace:*",
+    "@neondatabase/serverless": "^1.1.0",
+    "@prisma/adapter-neon": "7.10.0",
+    "@prisma/adapter-pg": "^7.0.0",
+    "@prisma/client": "^7.0.0",
+    "pg": "^8.13.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.0",
+    "dotenv": "^16.4.0",
+    "prisma": "^7.0.0",
+    "tsx": "^4.19.0"
+  }
+}

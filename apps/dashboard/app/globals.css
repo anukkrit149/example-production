@@ -1,0 +1,175 @@
+@import "tailwindcss";
+/*
+ * Neon Auth UI theme tokens only (~2KB), the Tailwind v4 path. Never also
+ * import '@neondatabase/auth-ui/css' — the two together duplicate every style.
+ * These tokens sit in @layer neon-auth, below our own :root block, so the
+ * brand values further down this file win and the sign-in form comes out in
+ * Hide Fashion colours.
+ */
+@import "@neondatabase/auth-ui/tailwind";
+
+/*
+ * Same tokens as apps/web/app/globals.css, by design. Until @hf/ui exists each
+ * app carries one copy; change both or neither.
+ */
+
+/*
+ * Hide Fashion brand tokens.
+ *
+ * Three-value oxblood on warm neutrals, straight from the brand kit. Oxblood is
+ * the INTERFACE accent — primary action, focus, active state — and never a
+ * stage. Stage colour belongs to the physical label stock (blue cutting, red
+ * pasting, yellow stitching, green finishing); an operator matching the screen
+ * against the sticker on the piece is the whole point of this app, so those four
+ * hues are reserved and defined separately below.
+ */
+:root {
+  --hf-oxblood-lit: #9a453f;
+  --hf-oxblood-deep: #571f1b;
+  --hf-ink: #171714;
+  --hf-paper: #f2efe8;
+
+  /* Warm neutrals derived from paper and ink, for rules, cards and quiet text. */
+  --hf-card: #fbfaf7;
+  --hf-line: #ddd7ca;
+  --hf-muted: #5a564d;
+
+  /*
+   * Label stock. These mirror the physical sticker colours and must never be
+   * swapped for oxblood. Each is dark enough for white text at AA on its pill.
+   */
+  --hf-stage-cutting: #1d4ed8;
+  --hf-stage-pasting: #b91c1c;
+  --hf-stage-stitching: #eab308;
+  --hf-stage-finishing: #15803d;
+  --hf-stage-qc: #4338ca;
+  --hf-stage-packaging: #44403a;
+
+  --background: var(--hf-paper);
+  --foreground: var(--hf-ink);
+
+  /*
+   * The sign-in form. @neondatabase/auth-ui reads shadcn-named tokens
+   * (--card, --primary, --input, --ring …) and falls back to neutral greys
+   * when they are missing. Only --background and --foreground were set, so
+   * the form came out grey-on-grey: near-white input borders on a cream card,
+   * a charcoal primary button, no brand at all. Every token it uses is mapped
+   * here. --input is the border of text fields and the six code boxes, so it
+   * is a step darker than --hf-line to stay visible on the card.
+   */
+  --card: var(--hf-card);
+  --card-foreground: var(--hf-ink);
+  --popover: var(--hf-card);
+  --popover-foreground: var(--hf-ink);
+  --primary: var(--hf-oxblood-lit);
+  --primary-foreground: #ffffff;
+  --secondary: #e9e4d8;
+  --secondary-foreground: var(--hf-ink);
+  --muted: #ece7dc;
+  --muted-foreground: var(--hf-muted);
+  --accent: #ece7dc;
+  --accent-foreground: var(--hf-ink);
+  --destructive: #b91c1c;
+  --destructive-foreground: #b91c1c;
+  --border: var(--hf-line);
+  --input: #bfb7a7;
+  --ring: var(--hf-oxblood-lit);
+  --radius: 0.5rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-oxblood: var(--hf-oxblood-lit);
+  --color-oxblood-deep: var(--hf-oxblood-deep);
+  --color-ink: var(--hf-ink);
+  --color-paper: var(--hf-paper);
+  --color-card: var(--hf-card);
+  --color-line: var(--hf-line);
+  --color-muted: var(--hf-muted);
+  --font-display: var(--font-newsreader), Georgia, "Times New Roman", serif;
+  --font-label: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/*
+ * Body copy stays on the system UI stack. At arm's length, under factory
+ * lighting, the platform's own text rendering is the most legible thing
+ * available; Instrument Sans carries the header, pills and button labels.
+ */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* The wordmark and display headings: Newsreader 500, tracked out per the kit. */
+.hf-display {
+  font-family: var(--font-newsreader), Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+}
+
+/*
+ * Labels, subtext and UI chrome: Instrument Sans 600, uppercase.
+ *
+ * 11px at 0.12em, not 10px at 0.31em. The wide track was a poster setting: on a
+ * caption it pulls the letters so far apart the word stops reading as a word,
+ * and 10px is below what a manager reads comfortably on a factory floor. The
+ * size is set here so every .hf-label gets it without a utility class.
+ */
+.hf-label {
+  font-family: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/*
+ * Button and pill text: the same face at a tighter track still. These strings
+ * are longer than a caption and sit inside a fixed box, so 0.06em buys back
+ * the width that a larger font-size spends.
+ */
+.hf-ui {
+  font-family: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+/* Keyboard users on a desk: the ring has to survive a bright office. */
+:where(button, a, input, select, textarea):focus-visible {
+  outline: 3px solid var(--hf-oxblood-lit);
+  outline-offset: 2px;
+}
+
+/* Table rows: 36px, dense, quiet rules. */
+.hf-table th, .hf-table td { height: 36px; padding: 0 12px; border-bottom: 1px solid var(--hf-line); text-align: left; white-space: nowrap; }
+.hf-table th { position: sticky; top: 0; background: var(--hf-paper); font-family: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px; color: var(--hf-muted); }
+.hf-table tbody tr:hover { background: var(--hf-card); }
+.hf-num { font-variant-numeric: tabular-nums; text-align: right; }
+
+/*
+ * Placeholder blocks for the route loading state and the sidebar's pending
+ * link. A slow, low-contrast pulse on the rule colour: visible enough to say
+ * "working", quiet enough not to flash on a fast connection.
+ */
+.hf-skeleton { background: var(--hf-line); animation: hf-pulse 1.4s ease-in-out infinite; }
+@keyframes hf-pulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .hf-skeleton { animation: none; opacity: 0.7; } }
+
+/* Phones: a table marked .hf-cards becomes a stack of cards. Each cell shows its column name from data-label; a data-primary cell is the card title; a cell with neither spans the card (progress strips, buttons). */
+@media (max-width: 767px) {
+  .hf-table.hf-cards, .hf-table.hf-cards tbody, .hf-table.hf-cards tr { display: block; }
+  .hf-table.hf-cards thead { display: none; }
+  .hf-table.hf-cards tr { margin-bottom: 12px; border: 1px solid var(--hf-line); border-radius: 8px; background: var(--hf-card); padding: 8px 12px; }
+  .hf-table.hf-cards tbody tr:hover { background: var(--hf-card); }
+  .hf-table.hf-cards td { display: flex; align-items: center; justify-content: space-between; gap: 12px; height: auto; min-height: 32px; padding: 4px 0; border-bottom: 0; white-space: normal; text-align: left; }
+  .hf-table.hf-cards td[data-label]::before { content: attr(data-label); flex: 0 0 auto; font-family: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px; color: var(--hf-muted); }
+  .hf-table.hf-cards td[data-primary] { display: block; padding-bottom: 6px; margin-bottom: 4px; border-bottom: 1px solid var(--hf-line); font-size: 16px; font-weight: 600; text-align: left; }
+  .hf-table.hf-cards td:not([data-label]):not([data-primary]) > * { flex: 1 1 auto; }
+  .hf-table.hf-cards td.hf-num { text-align: right; }
+  .hf-table.hf-cards td:empty { display: none; }
+}

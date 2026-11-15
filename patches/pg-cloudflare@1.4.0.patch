@@ -1,0 +1,47 @@
+diff --git a/dist/empty.js b/dist/empty.js
+index bd78fc976ce1e8f5288b1c80dd7bf17382bb56eb..fc1049d954ddb1ce3cb4029af83af1a4d47e6a40 100644
+--- a/dist/empty.js
++++ b/dist/empty.js
+@@ -3,4 +3,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
+ // This is an empty module that is served up when outside of a workerd environment
+ // See the `exports` field in package.json
+ exports.default = {};
+-//# sourceMappingURL=empty.js.map
+\ No newline at end of file
++// PATCHED (see pnpm.patchedDependencies in the root package.json).
++//
++// Upstream points the `workerd` export condition at ./dist/index.js, a real TCP
++// socket implementation. The OpenNext build traces node_modules under Node, so
++// it follows the `default` condition and only ever copies this file — then
++// esbuild resolves the package under `workerd`, asks for dist/index.js, and
++// fails the build on a file that was never copied.
++//
++// This app does not use pg on Workers at all: @hf/db selects
++// @prisma/adapter-neon there and talks to Postgres over a WebSocket. So the
++// socket is genuinely unreachable in that runtime, and both conditions are
++// pointed here. The throw exists so that if the pg branch ever *is* reached on
++// Workers, it fails loudly and accurately instead of on `undefined`.
++class CloudflareSocket {
++  constructor() {
++    throw new Error(
++      'pg-cloudflare: TCP sockets are not used in this build. On Workers this app connects through @prisma/adapter-neon over WebSocket.',
++    );
++  }
++}
++exports.CloudflareSocket = CloudflareSocket;
+diff --git a/package.json b/package.json
+index 8081b54cf64dec6e91b6e30df100b4f57472e618..ba1d46a1d770293d51802e2db34da60bd7ac90bb 100644
+--- a/package.json
++++ b/package.json
+@@ -11,10 +11,7 @@
+   },
+   "exports": {
+     ".": {
+-      "workerd": {
+-        "import": "./esm/index.mjs",
+-        "require": "./dist/index.js"
+-      },
++      "workerd": "./dist/empty.js",
+       "default": "./dist/empty.js"
+     },
+     "./package.json": "./package.json"

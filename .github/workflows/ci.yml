@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    # The suite needs a real Postgres: it exercises SELECT ... FOR UPDATE, which
+    # no in-memory stand-in reproduces, and that lock is what stops a double tap
+    # on bad factory wifi recording two events against one piece.
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: hf
+          POSTGRES_PASSWORD: hf
+          POSTGRES_DB: hf
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready --health-interval 5s
+          --health-timeout 5s --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://hf:hf@127.0.0.1:5432/hf_test
+      TEST_DATABASE_URL: postgresql://hf:hf@127.0.0.1:5432/hf_test
+      WEB_TEST_DATABASE_URL: postgresql://hf:hf@127.0.0.1:5432/hf_test_web
+      DASHBOARD_TEST_DATABASE_URL: postgresql://hf:hf@127.0.0.1:5432/hf_test_dashboard
+      S3_ENDPOINT: http://127.0.0.1:9000
+      S3_REGION: us-east-1
+      S3_BUCKET: hf-photos
+      S3_ACCESS_KEY: hfadmin
+      S3_SECRET_KEY: hfhfhfhf
+      S3_FORCE_PATH_STYLE: 'true'
+      DEV_AUTH: 'true'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Create the test databases
+        run: |
+          psql "postgresql://hf:hf@127.0.0.1:5432/hf" -c 'CREATE DATABASE hf_test'
+          psql "postgresql://hf:hf@127.0.0.1:5432/hf" -c 'CREATE DATABASE hf_test_web'
+          psql "postgresql://hf:hf@127.0.0.1:5432/hf" -c 'CREATE DATABASE hf_test_dashboard'
+
+      # The generated client is gitignored, and the root postinstall that
+      # normally creates it does not run on a --frozen-lockfile install here.
+      - name: Generate the Prisma client
+        run: pnpm --filter @hf/db exec prisma generate
+
+      # packages/db reads the root .env through a static `new URL('../../../.env')`,
+      # which Turbopack resolves at build time — so the file has to exist or the
+      # web build fails on a module-not-found. It is gitignored, and CI supplies
+      # every real value through the job env above, so an empty file is right:
+      # dotenv is called with `override: false` and has nothing to override.
+      - name: Create the root .env the bundler resolves
+        run: touch .env
+
+      - name: Apply migrations
+        run: |
+          cd packages/db
+          DATABASE_URL="$TEST_DATABASE_URL" pnpm exec prisma migrate deploy
+          DATABASE_URL="$WEB_TEST_DATABASE_URL" pnpm exec prisma migrate deploy
+          DATABASE_URL="$DASHBOARD_TEST_DATABASE_URL" pnpm exec prisma migrate deploy
+
+      - run: pnpm typecheck
+      - run: pnpm lint
+      - run: pnpm test
+      - run: pnpm --filter @hf/web build
+      - run: pnpm --filter @hf/dashboard build

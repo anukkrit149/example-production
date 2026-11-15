@@ -1,0 +1,5 @@
+[
+  { "id": "user-admin", "name": "Admin", "role": "admin", "authIdentity": "dev:admin", "active": true },
+  { "id": "user-qa", "name": "QA Checker", "role": "qa", "authIdentity": "dev:qa", "active": true },
+  { "id": "user-store", "name": "Store", "role": "store", "authIdentity": "dev:store", "active": true }
+]

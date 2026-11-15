@@ -1,0 +1,161 @@
+@import "tailwindcss";
+
+/*
+ * Hide Fashion brand tokens.
+ *
+ * Three-value oxblood on warm neutrals, straight from the brand kit. Oxblood is
+ * the INTERFACE accent — primary action, focus, active state — and never a
+ * stage. Stage colour belongs to the physical label stock (blue cutting, red
+ * pasting, yellow stitching, green finishing); an operator matching the screen
+ * against the sticker on the piece is the whole point of this app, so those four
+ * hues are reserved and defined separately below.
+ */
+:root {
+  --hf-oxblood-lit: #9a453f;
+  --hf-oxblood-deep: #571f1b;
+  --hf-ink: #171714;
+  --hf-paper: #f2efe8;
+
+  /* Warm neutrals derived from paper and ink, for rules, cards and quiet text. */
+  --hf-card: #fbfaf7;
+  --hf-line: #ddd7ca;
+  --hf-muted: #6b675d;
+
+  /*
+   * Label stock. These mirror the physical sticker colours and must never be
+   * swapped for oxblood. Each is dark enough for white text at AA on its pill.
+   */
+  --hf-stage-cutting: #1d4ed8;
+  --hf-stage-pasting: #b91c1c;
+  --hf-stage-stitching: #eab308;
+  --hf-stage-finishing: #15803d;
+  --hf-stage-qc: #4338ca;
+  --hf-stage-packaging: #44403a;
+
+  --background: var(--hf-paper);
+  --foreground: var(--hf-ink);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-oxblood: var(--hf-oxblood-lit);
+  --color-oxblood-deep: var(--hf-oxblood-deep);
+  --color-ink: var(--hf-ink);
+  --color-paper: var(--hf-paper);
+  --color-card: var(--hf-card);
+  --color-line: var(--hf-line);
+  --color-muted: var(--hf-muted);
+  --font-display: var(--font-newsreader), Georgia, "Times New Roman", serif;
+  --font-label: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/*
+ * Body copy stays on the system UI stack. At arm's length, under factory
+ * lighting, the platform's own text rendering is the most legible thing
+ * available; Instrument Sans carries the header, pills and button labels.
+ */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* The wordmark and display headings: Newsreader 500, tracked out per the kit. */
+.hf-display {
+  font-family: var(--font-newsreader), Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+}
+
+/* Labels, subtext and UI chrome: Instrument Sans 600, wide uppercase tracking. */
+.hf-label {
+  font-family: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.31em;
+  text-transform: uppercase;
+}
+
+/*
+ * Button text uses the same face at a tighter track — 0.31em on a full button
+ * label pushes the word past the edge of a 390 px screen.
+ */
+.hf-ui {
+  font-family: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+/* Gloved thumbs miss small targets; the focus ring has to survive daylight. */
+:where(button, a, input, select, textarea):focus-visible {
+  outline: 3px solid var(--hf-oxblood-lit);
+  outline-offset: 2px;
+}
+
+/*
+ * Printing ID cards.
+ *
+ * The admin issues cards on the same phone or laptop they do everything else
+ * on, and they have to come out of the printer as cards — not as a screenshot
+ * of an admin screen with a nav bar and a Revoke button on it. So print hides
+ * the app and shows only the sheet.
+ *
+ * Every rule is gated on `body:has(.hf-print-sheet)`. This stylesheet is the
+ * root layout's, loaded on every screen in the app, and an ungated
+ * `body * { visibility: hidden }` would mean Ctrl+P anywhere — a piece history,
+ * a print queue — produced a blank page. Only a screen that actually holds a
+ * sheet gets the blackout. Where `:has()` is unsupported the rules simply do
+ * not apply and the card prints inside the page around it, which is untidy but
+ * never blank.
+ *
+ * `visibility` rather than `display: none` on the way out: a hidden ancestor
+ * with `display: none` takes the sheet inside it too, and the sheet is nested
+ * several levels down inside the page it is being hidden from. Visibility is
+ * inherited but overridable, which is exactly the behaviour needed here.
+ *
+ * `print-color-adjust` because the QR is the whole point: browsers drop
+ * backgrounds when printing to save ink, and a QR whose modules have been
+ * helpfully lightened does not scan.
+ */
+@media print {
+  body:has(.hf-print-sheet) * {
+    visibility: hidden;
+  }
+
+  body:has(.hf-print-sheet) .hf-print-sheet,
+  body:has(.hf-print-sheet) .hf-print-sheet * {
+    visibility: visible;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /*
+   * Lifted out of the page's centred phone column, which is narrower than the
+   * paper and would print one card per row down the middle of an A4 sheet.
+   */
+  body:has(.hf-print-sheet) .hf-print-sheet {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    /* Centred looks better on screen; a guillotine wants every card in the same
+       column, so print squares them up to the left. */
+    justify-content: flex-start;
+  }
+
+  /* A card guillotined in half by a page boundary is a wasted card. */
+  .hf-print-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Controls that only make sense on a screen: the Print button would
+     otherwise print itself, in the middle of the sheet. */
+  body:has(.hf-print-sheet) .hf-no-print {
+    display: none !important;
+  }
+}

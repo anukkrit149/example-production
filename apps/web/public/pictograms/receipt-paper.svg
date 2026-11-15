@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" fill="none" stroke="#171714" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="receipt-paper">
+  <path d="M26 8h36v80l-7-5-7 5-7-5-7 5-8-5V13z"/>
+  <path d="M34 22h20M34 32h20M34 42h14"/>
+  <circle cx="66" cy="60" r="16" transform="rotate(-18 66 60)"/>
+  <path d="M59 60l5 5 9-11" transform="rotate(-18 66 60)"/>
+</svg>

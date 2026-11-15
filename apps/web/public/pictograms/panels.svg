@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" fill="none" stroke="#171714" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="panels">
+  <path d="M14 20h30v24l-6 8H14z"/>
+  <path d="M52 20h30v32H58l-6-8z"/>
+  <path d="M14 58h30v18H14z"/>
+  <path d="M52 58h30v18H52z"/>
+</svg>

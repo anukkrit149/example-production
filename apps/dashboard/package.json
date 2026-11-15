@@ -1,0 +1,48 @@
+{
+  "name": "@hf/dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3002",
+    "build": "next build",
+    "start": "next start -p 3002",
+    "lint": "eslint",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@hf/contracts": "workspace:*",
+    "@hf/db": "workspace:*",
+    "@hf/domain": "workspace:*",
+    "@hf/server": "workspace:*",
+    "@neondatabase/auth": "0.5.0-beta",
+    "@neondatabase/auth-ui": "0.3.0-beta",
+    "class-variance-authority": "^0.7.1",
+    "cn": "^0.2.5",
+    "date-fns": "^4.4.0",
+    "lucide-react": "^1.41.0",
+    "next": "16.3.4",
+    "radix-ui": "^1.6.7",
+    "react": "19.2.8",
+    "react-day-picker": "^10.0.1",
+    "react-dom": "19.2.8",
+    "recharts": "3.8.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@opennextjs/cloudflare": "1.20.6",
+    "@playwright/test": "^1.50.0",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "dotenv": "^16.4.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.4",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "vitest": "^3.2.0",
+    "wrangler": "^4.129.0"
+  }
+}

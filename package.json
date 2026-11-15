@@ -1,0 +1,36 @@
+{
+  "name": "example-production",
+  "private": true,
+  "packageManager": "pnpm@10.33.4",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @hf/web dev",
+    "dev:portal": "pnpm --filter @hf/portal dev",
+    "dev:dashboard": "pnpm --filter @hf/dashboard dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "test": "vitest run --no-file-parallelism",
+    "test:e2e": "pnpm --filter @hf/web test:e2e",
+    "test:e2e:mock": "pnpm --filter @hf/web test:e2e:mock",
+    "test:e2e:dashboard": "pnpm --filter @hf/dashboard test:e2e",
+    "db:migrate": "pnpm --filter @hf/db migrate",
+    "db:seed": "pnpm --filter @hf/db seed",
+    "db:reset": "pnpm --filter @hf/db reset",
+    "postinstall": "pnpm --filter @hf/db exec prisma generate",
+    "db:migrate:test": "cd packages/db && DATABASE_URL=$TEST_DATABASE_URL pnpm exec prisma migrate deploy",
+    "test:all": "pnpm test && pnpm test:e2e && pnpm test:e2e:dashboard"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "vitest": "^3.2.0"
+  },
+  "dependencies": {
+    "@neon/config": "^1.2.0",
+    "@neon/env": "^1.2.0"
+  },
+  "description": "Local example of factory production software. No live hosts and no personal data.",
+  "license": "BSD-2-Clause"
+}

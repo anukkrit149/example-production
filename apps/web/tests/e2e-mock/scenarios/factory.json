@@ -1,0 +1,71 @@
+{
+  "pieces": [
+    { "id": "piece-planned", "state": "PLANNED", "actions": ["activate", "cancel"], "serial": 1, "qrToken": "HF-P-PLANAAAA", "styleCode": "HF-JKT-01" },
+    { "id": "piece-cut-pending", "state": "CUT_PENDING_QA", "actions": ["submit_qa", "reject"], "serial": 2, "qrToken": "CUTQ0002", "styleCode": "HF-JKT-01" },
+    { "id": "piece-cut-ok", "state": "CUT_OK", "actions": ["issue", "reprint", "hold", "reject"], "serial": 3, "qrToken": "CUTOK003", "styleCode": "HF-JKT-01" },
+    { "id": "piece-pasting", "state": "WITH_PASTING", "actions": ["receive", "hold"], "serial": 4, "qrToken": "PASTE004", "styleCode": "HF-JKT-01" },
+    { "id": "piece-paste-qa", "state": "PASTED_PENDING_QA", "actions": ["submit_qa", "reject"], "serial": 5, "qrToken": "PSTQ0005", "styleCode": "HF-JKT-01" },
+    { "id": "piece-paste-ok", "state": "PASTE_OK", "actions": ["issue", "reprint", "hold", "reject"], "serial": 6, "qrToken": "PSTOK006", "styleCode": "HF-JKT-01" },
+    { "id": "piece-stitching", "state": "WITH_STITCHING", "actions": ["receive", "hold"], "serial": 7, "qrToken": "STCH0007", "styleCode": "HF-JKT-01" },
+    { "id": "piece-stitch-qa", "state": "STITCHED_PENDING_QA", "actions": ["submit_qa", "reject"], "serial": 8, "qrToken": "STCQ0008", "styleCode": "HF-JKT-01" },
+    { "id": "piece-stitch-ok", "state": "STITCH_OK", "actions": ["issue", "reprint", "hold", "reject"], "serial": 9, "qrToken": "STOK0009", "styleCode": "HF-JKT-01" },
+    { "id": "piece-finishing", "state": "WITH_FINISHING", "actions": ["receive", "hold"], "serial": 10, "qrToken": "FNSH0010", "styleCode": "HF-JKT-01" },
+    { "id": "piece-finish-qa", "state": "FINISHED_PENDING_QA", "actions": ["submit_qa", "reject"], "serial": 11, "qrToken": "FNQ00011", "styleCode": "HF-JKT-01" },
+    { "id": "piece-finish-ok", "state": "FINISH_OK", "actions": ["submit_qa", "reprint", "hold", "reject"], "serial": 12, "qrToken": "FNOK0012", "styleCode": "HF-JKT-01" },
+    { "id": "piece-qc", "state": "QC_OK", "actions": ["pack", "hold"], "serial": 13, "qrToken": "QCOK0013", "styleCode": "HF-JKT-01" },
+    { "id": "piece-hold", "state": "ON_HOLD", "actions": ["release"], "serial": 14, "qrToken": "HOLD0014", "styleCode": "HF-JKT-01" }
+  ],
+  "checklistFor": ["piece-cut-pending"],
+  "receipts": [
+    {
+      "id": "rcpt-1",
+      "status": "RECEIVED",
+      "supplier": "Tannery",
+      "reference": "DN-9",
+      "hasDiscrepancy": false,
+      "receivedBy": "Store",
+      "receivedById": "user-store",
+      "receivedAt": "2026-01-15T04:30:00.000Z",
+      "countedBy": null,
+      "countedAt": null,
+      "items": [{ "code": "HIDE-1", "expectedQty": 10, "countedQty": null }],
+      "thumbnailUrl": null
+    }
+  ],
+  "receipt": {
+    "id": "rcpt-1",
+    "status": "RECEIVED",
+    "supplier": "Tannery",
+    "reference": "DN-9",
+    "location": "Shelf A",
+    "note": null,
+    "countNote": null,
+    "hasDiscrepancy": false,
+    "version": 1,
+    "receivedBy": "Store",
+    "receivedAt": "2026-01-15T04:30:00.000Z",
+    "countedBy": null,
+    "countedAt": null,
+    "lines": [
+      {
+        "itemId": "item-hide",
+        "code": "HIDE-1",
+        "nameEn": "Hide",
+        "nameHi": "खाल",
+        "unit": "pcs",
+        "expectedQty": 10,
+        "countedQty": null,
+        "addedAtCount": false,
+        "variance": null
+      }
+    ],
+    "photos": [],
+    "events": []
+  },
+  "items": [
+    { "id": "item-hide", "code": "HIDE-1", "nameEn": "Hide", "nameHi": "खाल", "unit": "pcs" }
+  ],
+  "orders": [
+    { "orderId": "order-1", "orderNumber": "HF-1042", "programName": "Autumn", "packed": 3 }
+  ]
+}

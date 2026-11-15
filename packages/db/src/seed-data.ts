@@ -51,7 +51,9 @@ export async function seedAll(db: PrismaClient): Promise<SeedResult> {
 
   const order = await db.order.upsert({
     where: { programId_orderNumber: { programId: program.id, orderNumber: 'PO-4471' } },
-    update: {}, create: { programId: program.id, orderNumber: 'PO-4471', dueDate: new Date('2026-11-15') },
+    // A started order is overdue once this instant is in the past. Keep the
+    // sample day ahead of today so the seeded order stays in production.
+    update: {}, create: { programId: program.id, orderNumber: 'PO-4471', dueDate: new Date('2030-06-01') },
   })
 
   const liSpecs = [

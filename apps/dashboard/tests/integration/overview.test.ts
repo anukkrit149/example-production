@@ -79,7 +79,7 @@ describe('factory overview', () => {
 
     // The plan curve ends on the due date and never promises more than is ordered.
     expect(o.cumulative.ordered).toBe(65)
-    expect(o.cumulative.days.at(-1)).toBe('2026-11-15')
+    expect(o.cumulative.days.at(-1)).toBe('2030-06-01')
     expect(o.cumulative.packed).toHaveLength(o.cumulative.days.length)
     expect(o.cumulative.projection).toHaveLength(o.cumulative.days.length)
     // Packed-to-date is cumulative, so it only ever climbs.
